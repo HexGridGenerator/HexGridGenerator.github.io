@@ -80,18 +80,15 @@
 					ctx.direction = 'ltr'; //text will draw left to right
 
 					//function to draw base canvas
-					function drawBase(cur_hex){
+					function drawBase(needs_offset){
 						for (var j = 0; j < ( y_hex ); j++){
 							ctx.strokeStyle = HexStrokeStyle; //set hex stroke style
 							ctx.fillStyle = HexFillStyle; //set hex fill style
 
 							ctx.translate( 1 , 1 ); //translates from 0,0 to 1,1 in order to give a 1px border to canvas
 
-							if (cur_hex == x_hex){
-								ctx.translate( i * 70 , j * 80 ); //translates to next hex location
-							} else {
-								ctx.translate( i * 70 , j * 80 + 40 ); //translates to next hex location
-							}
+							vertical_offset = needs_offset * 40
+							ctx.translate( i * 70 , j * 80 + vertical_offset); //translates to next hex location
 
 							ctx.lineWidth = 1; //width (in pixels) of stroked hex path
 							ctx.lineJoin = 'miter'; //when hex paths join have sharp corners
@@ -123,10 +120,10 @@
 
 					//this loop is where the magic happens
 					for (var i = 0; i < ( x_hex ); i++){
-						if ( i % 2 === 0 ) { //if the column is even
-							drawBase(x_hex)
-						} else { //if the column is odd
-							drawBase(y_hex)
+						if ( i % 2 === 0 ) { //if the column is even, don't apply vertical offset
+							drawBase(0)
+						} else { //if the column is odd, apply vertical offset
+							drawBase(1)
 						}
 					}
 				}
